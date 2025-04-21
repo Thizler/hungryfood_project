@@ -1,3 +1,5 @@
-# project1_test
+# Project: Hungry Food (Mobile App)
 
-A new Flutter project.
+A Flutter project.
+
+# Technologies Used
