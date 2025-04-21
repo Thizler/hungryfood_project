@@ -18,6 +18,7 @@ HUNGRY FOOD เป็นแอปมือถือที่ช่วยให�
 
 # Data Structures
 
+```bash
 lib/
 ├── main.dart
 ├── login.dart
@@ -27,6 +28,7 @@ lib/
 ├── menu/
 ├── popu_menu/
 └── settingapp/
+```
 
 # Setup Instructions
 
