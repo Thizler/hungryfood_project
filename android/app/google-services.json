@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "103981826267",
+    "project_id": "hungryfood-850fb",
+    "storage_bucket": "hungryfood-850fb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103981826267:android:dacdaf32d5204c743e8cfe",
+        "android_client_info": {
+          "package_name": "com.example.project1_test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIZMbR2QX4wYiH_E2uYkMCv05eaVyyITs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

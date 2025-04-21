@@ -1,0 +1,56 @@
+name: project1_test
+description: "A new Flutter project."
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.6.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.1.2 # (เวอร์ชันล่าสุด ณ ตอนนี้, เช็ค pub.dev เผื่อมีอัปเดต)
+  shared_preferences: ^2.2.2
+  firebase_core: ^2.27.0
+  firebase_auth: ^4.17.3
+  firebase_auth_web: ^5.8.13
+  cloud_firestore: ^4.15.3
+
+dependency_overrides:
+  js: ^0.6.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/pasta/
+    - assets/rice/
+    - assets/burger/
+    - assets/images/testfood.jpg
+    - assets/chicken/
+    - assets/popu_menu/
+    - assets/noodle/
+    - assets/burger/b2/
+    - assets/burger/b1/
+    - assets/burger/b3/
+    - assets/rice/shop/r1/
+    - assets/rice/shop/r2/
+    - assets/rice/shop/r3/
+    - assets/pasta/shop/p1/
+    - assets/pasta/shop/p2/
+    - assets/pasta/shop/p3/
+    - assets/noodle/shop/n1/
+    - assets/noodle/shop/n2/
+    - assets/noodle/shop/n3/
+    - assets/baegu/
+    - assets/gati/
+    - assets/mayong/
+    - assets/pakgad/
+    - assets/phoenix/
+    - assets/shrimp/
+    - assets/tomato/
+    - assets/profile_pic/
