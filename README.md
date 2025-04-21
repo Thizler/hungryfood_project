@@ -15,6 +15,7 @@ HUNGRY FOOD เป็นแอปมือถือที่ช่วยให�
 - Flutter
 - Firebase (Auth, Firestore)
 - Provider (State Management)
+- Node.js (ver. 18, 20, 22)
 
 # Data Structures
 
