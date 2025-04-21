@@ -3,3 +3,8 @@
 A Flutter project.
 
 # Technologies Used
+
+- Dart
+- Firebase
+
+# Setup Instructions
