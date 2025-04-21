@@ -33,6 +33,11 @@ lib/
 # Setup Instructions
 
 ```bash
+npm i -g firebase-tools
+dart pub global activate flutterfire_cli
+```
+
+```bash
 git clone https://github.com/Thizler/hungryfood_project.git
 cd your-project
 flutter pub get
