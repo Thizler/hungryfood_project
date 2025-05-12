@@ -66,31 +66,30 @@ class MyApp extends StatelessWidget {
               body: Center(child: CircularProgressIndicator()),
             ),
           );
-}else if (snapshot.connectionState == ConnectionState.done) {
-  if (snapshot.hasError) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
-        ),
-      ),
-    );
-  } else {
-    final username = userProvider.username;
-    if (username != null) {
-      initProviders(context, username);
-    }
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return MaterialApp(
+              home: Scaffold(
+                body: Center(
+                  child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
+                ),
+              ),
+            );
+          } else {
+            final username = userProvider.username;
+            if (username != null) {
+              initProviders(context, username);
+            }
 
-    return MaterialApp(
-      title: 'HUNGRY FOOD',
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: themeProvider.themeMode,
-      home: username != null ? MyHomePage() : LoginPage(),
-    );
-  }
-}
- else {
+            return MaterialApp(
+              title: 'HUNGRY FOOD',
+              theme: ThemeData.light(),
+              darkTheme: ThemeData.dark(),
+              themeMode: themeProvider.themeMode,
+              home: username != null ? MyHomePage() : LoginPage(),
+            );
+          }
+        } else {
           return MaterialApp(
             home: Scaffold(
               body: Center(child: Text('เกิดข้อผิดพลาดในการโหลดแอป')),

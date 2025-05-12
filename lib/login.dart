@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'providers/user_provider.dart';
+import 'providers/cart_provider.dart';
 import 'main.dart';
 import 'register.dart';
 
@@ -30,6 +31,8 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       await Provider.of<UserProvider>(context, listen: false).initUser();
+      await Provider.of<CartProvider>(context, listen: false)
+          .setUser(FirebaseAuth.instance.currentUser!.uid);
 
       Navigator.pushReplacement(
         context,

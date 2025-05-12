@@ -15,6 +15,7 @@ dependencies:
   firebase_auth: ^4.17.3
   firebase_auth_web: ^5.8.13
   cloud_firestore: ^4.15.3
+  uuid: ^3.0.7
 
 dependency_overrides:
   js: ^0.6.7

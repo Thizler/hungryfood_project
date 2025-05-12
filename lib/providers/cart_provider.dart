@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart'; // ใช้สำหรับสร้าง ID ที่ไม่ซ้ำกัน
 import '../models/cart_item.dart';
+import 'package:provider/provider.dart'; // เพิ่ม import สำหรับ Provider
+import 'package:firebase_auth/firebase_auth.dart'; // เพิ่ม import สำหรับ FirebaseAuth
 
 class CartProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -14,41 +17,65 @@ class CartProvider with ChangeNotifier {
 
   // โหลดข้อมูลตะกร้าจาก Firestore
   Future<void> loadCart() async {
-    if (_currentUser == null) return;
-
-    final cartSnapshot = await _firestore
-        .collection('users')
-        .doc(_currentUser)
-        .collection('cart')
-        .get();
-
-    _items.clear();
-    for (var doc in cartSnapshot.docs) {
-      _items.add(CartItem.fromJson(doc.data()));
+    if (_currentUser == null) {
+      print("Error: _currentUser is null");
+      return;
     }
-    notifyListeners();
+
+    try {
+      final cartSnapshot = await _firestore
+          .collection('users')
+          .doc(_currentUser)
+          .collection('cart')
+          .get();
+
+      _items.clear();
+      for (var doc in cartSnapshot.docs) {
+        _items.add(CartItem.fromJson(doc.data()));
+      }
+      print("Cart loaded successfully for user $_currentUser");
+      notifyListeners();
+    } catch (e) {
+      print("Error loading cart: $e");
+    }
   }
 
-  // บันทึกรายการเดี่ยวลง Firestore
-  Future<void> _saveItemToFirestore(CartItem item) async {
-    if (_currentUser == null) return;
-    await _firestore
-        .collection('users')
-        .doc(_currentUser)
-        .collection('cart')
-        .doc(item.title) // ใช้ title เป็น docId
-        .set(item.toJson());
+  // บันทึกรายการเดี่ยวลง Firestore พร้อม Document ID
+  Future<void> _saveItemToFirestore(CartItem item, String docId) async {
+    if (_currentUser == null) {
+      print("Error: _currentUser is null");
+      return;
+    }
+    try {
+      print("Saving item to Firestore: ${item.title}");
+      await _firestore
+          .collection('users')
+          .doc(_currentUser)
+          .collection('cart')
+          .doc(docId)
+          .set(item.toJson());
+      print("Item saved successfully: ${item.title}");
+    } catch (e) {
+      print("Error saving item to Firestore: $e");
+    }
   }
 
   // ลบรายการเดี่ยวจาก Firestore
-  Future<void> _removeItemFromFirestore(String title) async {
-    if (_currentUser == null) return;
-    await _firestore
-        .collection('users')
-        .doc(_currentUser)
-        .collection('cart')
-        .doc(title)
-        .delete();
+  Future<void> _removeItemFromFirestore(String docId) async {
+    if (_currentUser == null) {
+      print("Error: _currentUser is null");
+      return;
+    }
+    try {
+      await _firestore
+          .collection('users')
+          .doc(_currentUser)
+          .collection('cart')
+          .doc(docId)
+          .delete();
+    } catch (e) {
+      print("Error removing item from Firestore: $e");
+    }
   }
 
   void addItem(CartItem item) {
@@ -58,7 +85,11 @@ class CartProvider with ChangeNotifier {
     } else {
       _items.add(item);
     }
-    _saveItemToFirestore(_items[index == -1 ? _items.length - 1 : index]);
+
+    // สร้าง Document ID ที่ไม่ซ้ำกัน
+    final docId = Uuid().v4(); // ใช้ UUID สำหรับสร้าง ID
+
+    _saveItemToFirestore(item, docId);
     notifyListeners();
   }
 
@@ -66,7 +97,7 @@ class CartProvider with ChangeNotifier {
     final index = _items.indexWhere((i) => i.title == item.title);
     if (index != -1) {
       _items[index].quantity++;
-      _saveItemToFirestore(_items[index]);
+      _saveItemToFirestore(_items[index], _items[index].title);
       notifyListeners();
     }
   }
@@ -76,7 +107,7 @@ class CartProvider with ChangeNotifier {
     if (index != -1) {
       if (_items[index].quantity > 1) {
         _items[index].quantity--;
-        _saveItemToFirestore(_items[index]);
+        _saveItemToFirestore(_items[index], _items[index].title);
       } else {
         _removeItemFromFirestore(item.title);
         _items.removeAt(index);
@@ -95,26 +126,54 @@ class CartProvider with ChangeNotifier {
   }
 
   Future<void> clearCart() async {
-    if (_currentUser == null) return;
-    final batch = _firestore.batch();
-
-    final cartRef =
-        _firestore.collection('users').doc(_currentUser).collection('cart');
-
-    final snapshot = await cartRef.get();
-    for (var doc in snapshot.docs) {
-      batch.delete(doc.reference);
+    if (_currentUser == null) {
+      print("Error: _currentUser is null");
+      return;
     }
+    try {
+      final batch = _firestore.batch();
 
-    await batch.commit();
-    _items.clear();
-    notifyListeners();
+      final cartRef =
+          _firestore.collection('users').doc(_currentUser).collection('cart');
+
+      final snapshot = await cartRef.get();
+      for (var doc in snapshot.docs) {
+        batch.delete(doc.reference);
+      }
+
+      await batch.commit();
+      _items.clear();
+      notifyListeners();
+    } catch (e) {
+      print("Error clearing cart: $e");
+    }
   }
 
-Future<void> setUser(String userId) async {
+  Future<void> setUser(String userId) async {
     _currentUser = userId;
     print("CartProvider: set user $_currentUser");
     await loadCart();
   }
+}
 
+// ตัวอย่างการใช้งาน CartProvider
+void addSampleItem(BuildContext context) async {
+  final currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser == null) {
+    print("Error: User is not logged in.");
+    return;
+  }
+
+  print("Current User UID: ${currentUser.uid}");
+
+  await Provider.of<CartProvider>(context, listen: false)
+      .setUser(currentUser.uid);
+
+  final cartProvider = Provider.of<CartProvider>(context, listen: false);
+  cartProvider.addItem(CartItem(
+    title: "Spaghetti Carbonara",
+    description: "Delicious creamy pasta",
+    imagePath: "assets/images/carbonara.jpg",
+    price: 250,
+  ));
 }

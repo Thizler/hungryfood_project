@@ -3,17 +3,16 @@ class CartItem {
   final String description;
   final String imagePath;
   final int price;
-  int quantity; // เพิ่มจำนวนสินค้า
+  int quantity;
 
   CartItem({
     required this.title,
     required this.description,
     required this.imagePath,
     required this.price,
-    this.quantity = 1, // ค่าเริ่มต้นคือ 1
+    this.quantity = 1,
   });
 
-  // เพิ่มเมธอดนี้
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
       title: json['title'],
@@ -24,7 +23,6 @@ class CartItem {
     );
   }
 
-  // เพิ่มเมธอดนี้
   Map<String, dynamic> toJson() {
     return {
       'title': title,
