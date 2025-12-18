@@ -44,5 +44,10 @@ cd your-project
 flutter pub get
 flutter run
 ```
+  
+## Authors  
+Department of Computer Science, Srinakharinwirot University
+- Kunanon Hareutaitam - kunanon.mas@g.swu.ac.th
+- Aekkaphop Aunma - aekkaphop.aunma@g.swu.ac.th
+- Patcharapon Phetchoochart - patcharapon.phetchoochart@g.swu.ac.th
 
-Dev by Kunanon, Aekkapop, Patcharapon
